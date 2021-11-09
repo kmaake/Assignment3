@@ -1,0 +1,28 @@
+---
+title: "Assignment 3"
+author: 
+  - "Kine Maakestad"
+  - "Susann Sivertsen"
+output:
+  pdf_document: default
+  html_notebook: default
+  html_document:
+    df_print: paged
+  word_document: default
+lang: no-NB
+---
+
+# Svar på spørsmål
+
+## Spørsmål 1
+
+Filen ddf_concepts.csv inneholder ingen verdier. Det den derimot inneholder er prosentvis av arbeidsledighet, hvor mange barn som har dødd av en alder av 1-59 måneder og nyfødte barn som har dødd. 
+
+## Spørsmål 2
+
+
+
+## Spørsmål 3
+
+
+## Spørsmål 4

@@ -12,17 +12,127 @@ output:
 lang: no-NB
 ---
 
+```{r setup, message=FALSE, echo=FALSE}
+library(readr)
+library(tibble)
+library(prettydoc)
+library(knitr)
+library(tidyverse)
+library(dplyr)
+options(scipen = 999)
+```
+
 # Svar på spørsmål
 
 ## Spørsmål 1
 
-Filen ddf_concepts.csv inneholder ingen verdier. Det den derimot inneholder er prosentvis av arbeidsledighet, hvor mange barn som har dødd av en alder av 1-59 måneder og nyfødte barn som har dødd. 
+Filen ddf_concepts.csv inneholder ingen verdier. Det den derimot inneholder er prosentvis av arbeidsledighet, hvor mange barn som har dødd av en alder av 1-59 måneder og nyfødte barn som har dødd.
 
 ## Spørsmål 2
 
-
+I denne filen inneholder det også ingen verdier, men filen inneholder land, og hvilken av disse landene som har høy inntekt, middels inntekt og lav inntekt. Den har også med hvor landene ligger i verden, for eksempel så ligger Afghanistan i Asia, og de spesifiserer også at det landet ligger i Sør Asia.
 
 ## Spørsmål 3
 
+Ddf--entities--geo--un_sdg_region.csv inneholder de forskjellige regionene og om de er TRUE eller FALSE.
 
 ## Spørsmål 4
+
+Gapminder pakken inneholder 6 variabler. Disse er:
+
+-   Country: faktor med 142 nivåer
+
+-   Continent: faktor med 5 nivåer
+
+-   Year: områder fra 1952 til 2007 med trinn på 5 år
+
+-   Pop: populasjon
+
+-   gdpPercap: BNP per innbygger (US\$, inflasjon-justert
+
+Australia og New Zealand ligger i kontinentet Asia.
+
+## Spørsmål 5
+
+```{r}
+g_c <- read_csv("data/ddf--entities--geo--country.csv")
+print(g_c)
+```
+
+
+```{r spec}
+spec(g_c)
+```
+
+
+```{r continents}
+g_c <- g_c%>%
+  mutate(continent = case_when(
+    world_4region == "asia" & un_sdg_region %in% c("un_australia_and_new_zealand","un_oceania_exc_australia_and_new_zealand") ~ "Oceania",
+    world_4region == "asia" & !(un_sdg_region %in% c("un_australia_and_new_zealand", "un_oceania_exc_australia_and_new_zealand")) ~ "Asia",
+    world_4region == "africa" ~ "Africa",
+    world_4region == "americas" ~ "Americas",
+    world_4region == "europe" ~ "Europe")
+  ) %>% 
+  filter(!is.na(iso3166_1_alpha3))
+```
+
+
+## Spørsmål 6
+### a
+```{r numberofcountries}
+length(unique(g_c$country))
+```
+
+### b
+
+```{r countriesincontinent}
+g_c %>% 
+  group_by(continent) %>% 
+  summarise(countries = length(unique(country)))
+```
+## Spørsmål 7
+
+```{r lifeecp}
+lifeExp <- read_csv("data/countries-etc-datapoints/ddf--datapoints--life_expectancy_years--by--geo--time.csv",
+col_types = cols(time = col_date(format = "%Y")))
+lifeExp <- lifeExp %>% 
+  rename(year = time)
+names(lifeExp)
+length(unique(lifeExp$geo))
+```
+
+
+## Spørsmål 8
+
+```{r ContriesinlifeExp}
+length(unique(lifeExp$geo))
+```
+
+
+## Spørsmål 9
+
+```{r Reducevariables}
+g_c <- g_c %>%
+  select(country, name, iso3166_1_alpha3, un_sdg_region, world_4region, continent, world_6region) %>%
+  left_join(lifeExp, by = c("country" = "geo"))
+names(g_c)
+```
+
+## Spørsmål 10
+
+```{r minyear}
+g_c_min <- g_c %>% 
+  group_by(country) %>% 
+  summarise(min_year = min(year))
+table(g_c_min$min_year)
+```
+
+## Spørsmål 11
+
+```{r 1950}
+g_c_min %>% 
+  filter(min_year == "1950-01-01")
+```
+
+## Spørsmål 12

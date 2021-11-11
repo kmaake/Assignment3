@@ -11,7 +11,7 @@ output:
   word_document: default
 lang: no-NB
 ---
-
+test
 # Svar på spørsmål
 
 ## Spørsmål 1

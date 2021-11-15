@@ -136,3 +136,100 @@ g_c_min %>%
 ```
 
 ## Spørsmål 12
+
+```{r total population}
+
+pop <- read_csv("data/countries-etc-datapoints/ddf--datapoints--population_total--by--geo--time.csv",
+                 col_types = cols(time = col_date(format = "%Y")))
+             
+```
+
+```{r join population}
+g_c <- g_c %>%
+  left_join(pop, by = c("country" = "geo", "year" ="time"))
+
+rm(pop)
+```
+
+
+## Spørsmål 13 
+
+```{r GDP data}
+gdp_pc <- read_csv("data/countries-etc-datapoints/ddf--datapoints--gdppercapita_us_inflation_adjusted--by--geo--time.csv",
+                   col_types = cols(time = col_date(format = "%Y")))
+
+g_c <- g_c %>%
+  left_join(gdp_pc, by = c("country" = "geo", "year" ="time"))
+```
+
+```{r rename}
+g_c <- g_c %>%
+  rename("lifeExp" = "life_expectancy_years") %>%
+  rename("pop" = "population_total") %>%
+  rename("gdpPercap" = "gdppercapita_us_inflation_adjusted")
+names(g_c)
+```
+
+## Spørsmål 14
+
+```{r g_c_5}
+t1 <- paste (c(seq(1800, 2015, by = 5), 2019), "01-01", sep = "-") %>%
+  parse_date(format = "%Y-%m-%d")
+
+g_c_5 <- g_c %>% 
+  filter(year %in% t1) %>%
+  select(country, name, continent, year, lifeExp, pop, gdpPercap)
+
+dim(g_c_5)
+```
+
+```{r g_c_5}
+g_c_min_yr_gdp <- g_c_5 %>%
+  group_by(gdpPercap) %>%
+  summarise (min_year = min(year))
+
+g_c_min_yr_gdp %>%
+  count(min_year = g_c_min_yr_gdp$min_year)
+
+```
+
+Denne er feil
+
+## Spørsmål 15 
+
+Chunken under brukes for å vise hvilket år hvert land har innhentet BNP. 
+
+```{r}
+g_c <- g_c %>%
+  filter (!is.na(gdpPercap)) %>%
+  group_by(country) %>%
+  summarise (nr=n()) %>%
+  arrange((country))
+```
+
+Videre filtreres det ned til landene som har rapportert BNP over en lengre periode. I dette tilfelle de siste 60 årene:
+```{r}
+g_c_5 <- g_c %>%
+  filter(nr > 60)
+```
+
+Etter dette kan vi se at det er 84 land som har rapportert BNP de siste 60 årene. 
+
+## Spørsmål 16 
+
+Først i denne oppgaven lager vi ett nytt datasett for å finne observasjonene uten NA verdiene for å finne antall land.  
+
+
+```{r nytt datasett g_c_1960}
+c_min_y <- g_c_5 %>%
+  filter(!is.na(gdpPercap)) %>%
+  group_by(country) %>%
+  summarise(min_year = min(year))
+
+dim(c_min_y)
+```
+
+
+
+
+

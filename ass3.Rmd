@@ -157,10 +157,14 @@ rm(pop)
 ```{r GDP data}
 gdp_pc <- read_csv("data/countries-etc-datapoints/ddf--datapoints--gdppercapita_us_inflation_adjusted--by--geo--time.csv",
                    col_types = cols(time = col_date(format = "%Y")))
-
-g_c <- g_c %>%
-  left_join(gdp_pc, by = c("country" = "geo", "year" ="time"))
 ```
+
+
+```{r}
+g_c <- g_c %>%
+  left_join(gdp_pc, by = c("country" = "geo", "year" = "time"))
+```
+
 
 ```{r rename}
 g_c <- g_c %>%
@@ -225,8 +229,6 @@ c_min_y <- g_c_5 %>%
   filter(!is.na(gdpPercap)) %>%
   group_by(country) %>%
   summarise(min_year = min(year))
-
-dim(c_min_y)
 ```
 
 

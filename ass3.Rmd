@@ -231,6 +231,41 @@ c_min_y <- g_c_5 %>%
   summarise(min_year = min(year))
 ```
 
+## Spørsmål 17
+
+```{r}
+g_c_1960 %>%
+filter(year <= "1960-01-01") %>%
+  ggplot(mapping = aes(x = gdpPercap, y = lifeExp, size = pop, colour = continent)) +
+  geom_point() +
+  coord_cartesian(ylim = c(20, 90), xlim = c(0,10000)) +
+  theme(legend.position = "bottom")
+```
+
+```{r}
+g_c_1960 %>% 
+  filter(year <= "1980-01-01") %>%
+  ggplot(mapping = aes(x = gdpPercap, y = lifeExp, size = pop, colour = continent)) +
+  geom_point() +
+  coord_cartesian(ylim = c(20, 80), xlim = c(0,50000)) +
+  theme(legend.position = "bottom")
+```
+```{r}
+g_c_1960 %>%
+  filter(year <= "2000-01-01") %>%
+  ggplot(mapping = aes(x = gdpPercap, y = lifeExp, size = pop, colour = continent)) +
+  geom_point() +
+  coord_cartesian(ylim = c(20, 90), xlim = c(0,110000)) +
+  theme(legend.position = "bottom")
+```
+```{r}
+g_c_1960 %>%
+  filter(year <= "2019-01-01") %>%
+  ggplot(mapping = aes(x = gdpPercap, y = lifeExp, size = pop, colour = continent)) +
+  geom_point() +
+  coord_cartesian(ylim = c(20, 90), xlim = c(0,110000)) +
+  theme(legend.position = "bottom")
+```
 
 
 

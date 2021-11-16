@@ -137,14 +137,14 @@ g_c_min %>%
 
 ## Spørsmål 12
 
-```{r total population}
+```{r total_population}
 
 pop <- read_csv("data/countries-etc-datapoints/ddf--datapoints--population_total--by--geo--time.csv",
                  col_types = cols(time = col_date(format = "%Y")))
              
 ```
 
-```{r join population}
+```{r join_population}
 g_c <- g_c %>%
   left_join(pop, by = c("country" = "geo", "year" ="time"))
 
@@ -154,7 +154,7 @@ rm(pop)
 
 ## Spørsmål 13 
 
-```{r GDP data}
+```{r GDP_data}
 gdp_pc <- read_csv("data/countries-etc-datapoints/ddf--datapoints--gdppercapita_us_inflation_adjusted--by--geo--time.csv",
                    col_types = cols(time = col_date(format = "%Y")))
 ```
@@ -174,21 +174,23 @@ g_c <- g_c %>%
 names(g_c)
 ```
 
+
+
 ## Spørsmål 14
 
-```{r g_c_5}
+```{r g_c_5year}
 t1 <- paste (c(seq(1800, 2015, by = 5), 2019), "01-01", sep = "-") %>%
   parse_date(format = "%Y-%m-%d")
 
-g_c_5 <- g_c %>% 
+g_c_5year <- g_c %>% 
   filter(year %in% t1) %>%
   select(country, name, continent, year, lifeExp, pop, gdpPercap)
 
-dim(g_c_5)
+dim(g_c_5year)
 ```
 
-```{r g_c_5}
-g_c_min_yr_gdp <- g_c_5 %>%
+```{r g_c_5year}
+g_c_min_yr_gdp <- g_c_5year %>%
   group_by(gdpPercap) %>%
   summarise (min_year = min(year))
 
@@ -213,7 +215,7 @@ g_c <- g_c %>%
 
 Videre filtreres det ned til landene som har rapportert BNP over en lengre periode. I dette tilfelle de siste 60 årene:
 ```{r}
-g_c_5 <- g_c %>%
+g_c_5year <- g_c %>%
   filter(nr > 60)
 ```
 
@@ -221,15 +223,49 @@ Etter dette kan vi se at det er 84 land som har rapportert BNP de siste 60 åren
 
 ## Spørsmål 16 
 
-Først i denne oppgaven lager vi ett nytt datasett for å finne observasjonene uten NA verdiene for å finne antall land.  
+Først i denne oppgaven lager vi ett nytt datasett for å finne observasjonene uten NA verdiene, for å finne antall land med verdier. Her får vi 191 land.  
 
 
-```{r nytt datasett g_c_1960}
-c_min_y <- g_c_5 %>%
+```{r gap_minder_1960}
+c_min_y <- g_c_5year %>%
   filter(!is.na(gdpPercap)) %>%
-  group_by(country) %>%
+  group_by(country) %>% 
   summarise(min_year = min(year))
+
+dim(c_min_y)
 ```
+
+
+```{r gap_minder_1960}
+c_min_y_60 <- c_min_y$country[c_min_y$min_year == "1960-01-01"]
+my_gapminder_1960 <- g_c_5year %>%
+  filter(country %in% c_min_y_60)
+
+dim(my_gapminder_1960)
+```
+
+Videre ser man at det er 86 land med registrert data:
+
+```{r}
+length(unique(my_gapminder_1960$country))
+```
+
+Videre finner vi antall NA verdier:
+
+```{r NA_variables}
+(num_NA <- my_gapminder_1960[is.na(my_gapminder_1960$gdpPercap) == TRUE, ])
+```
+
+
+
+```{r country_per_continent}
+my_gapminder_1960 %>%
+  distinct(country, continent) %>%
+  group_by(continent) %>%
+  count () %>%
+  kable ()
+```
+
 
 ## Spørsmål 17
 
@@ -243,9 +279,6 @@ filter(year <= "1960-01-01") %>%
 ```
 
 ```{r}
-<<<<<<< HEAD
-
-=======
 g_c_1960 %>% 
   filter(year <= "1980-01-01") %>%
   ggplot(mapping = aes(x = gdpPercap, y = lifeExp, size = pop, colour = continent)) +
@@ -253,6 +286,7 @@ g_c_1960 %>%
   coord_cartesian(ylim = c(20, 80), xlim = c(0,50000)) +
   theme(legend.position = "bottom")
 ```
+
 ```{r}
 g_c_1960 %>%
   filter(year <= "2000-01-01") %>%
@@ -261,6 +295,7 @@ g_c_1960 %>%
   coord_cartesian(ylim = c(20, 90), xlim = c(0,110000)) +
   theme(legend.position = "bottom")
 ```
+
 ```{r}
 g_c_1960 %>%
   filter(year <= "2019-01-01") %>%
@@ -268,7 +303,6 @@ g_c_1960 %>%
   geom_point() +
   coord_cartesian(ylim = c(20, 90), xlim = c(0,110000)) +
   theme(legend.position = "bottom")
->>>>>>> 3f004b1aec1c657a35cfb93003ca02fe2b39446a
 ```
 
 

@@ -270,7 +270,7 @@ my_gapminder_1960 %>%
 ## Spørsmål 17
 
 ```{r}
-g_c_1960 %>%
+my_gapminder_1960 %>%
 filter(year <= "1960-01-01") %>%
   ggplot(mapping = aes(x = gdpPercap, y = lifeExp, size = pop, colour = continent)) +
   geom_point() +
@@ -279,7 +279,7 @@ filter(year <= "1960-01-01") %>%
 ```
 
 ```{r}
-g_c_1960 %>% 
+my_gapminder_1960 %>% 
   filter(year <= "1980-01-01") %>%
   ggplot(mapping = aes(x = gdpPercap, y = lifeExp, size = pop, colour = continent)) +
   geom_point() +
@@ -288,7 +288,7 @@ g_c_1960 %>%
 ```
 
 ```{r}
-g_c_1960 %>%
+my_gapminder_1960 %>%
   filter(year <= "2000-01-01") %>%
   ggplot(mapping = aes(x = gdpPercap, y = lifeExp, size = pop, colour = continent)) +
   geom_point() +
@@ -297,7 +297,7 @@ g_c_1960 %>%
 ```
 
 ```{r}
-g_c_1960 %>%
+my_gapminder_1960 %>%
   filter(year <= "2019-01-01") %>%
   ggplot(mapping = aes(x = gdpPercap, y = lifeExp, size = pop, colour = continent)) +
   geom_point() +

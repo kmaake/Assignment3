@@ -20,6 +20,7 @@ library(knitr)
 library(tidyverse)
 library(dplyr)
 library(gapminder)
+library(magrittr)
 options(scipen = 999)
 ```
 

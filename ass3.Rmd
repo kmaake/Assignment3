@@ -149,7 +149,7 @@ pop <- read_csv("data/countries-etc-datapoints/ddf--datapoints--population_total
              
 ```
 
-<<<<<<< HEAD
+
 ```{r join_population}
 g_c <- g_c %>%
   left_join(pop, by = c("country" = "geo", "year" ="time"))
@@ -206,7 +206,7 @@ g_c_min_yr_gdp %>%
   count(min_year = g_c_min_yr_gdp$min_year)
 ```
 
-Denne er feil
+
 
 ## Spørsmål 15 
 
@@ -316,6 +316,7 @@ g_c_1960 %>%
   coord_cartesian(ylim = c(20, 90), xlim = c(5, 12)) +
   theme(legend.position = "bottom")
 ```
+
 ```{r 1980 log}
 g_c_1960 %>%
   filter(year <= "1980-01-01") %>%

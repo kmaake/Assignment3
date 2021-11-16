@@ -157,10 +157,14 @@ rm(pop)
 ```{r GDP data}
 gdp_pc <- read_csv("data/countries-etc-datapoints/ddf--datapoints--gdppercapita_us_inflation_adjusted--by--geo--time.csv",
                    col_types = cols(time = col_date(format = "%Y")))
-
-g_c <- g_c %>%
-  left_join(gdp_pc, by = c("country" = "geo", "year" ="time"))
 ```
+
+
+```{r}
+g_c <- g_c %>%
+  left_join(gdp_pc, by = c("country" = "geo", "year" = "time"))
+```
+
 
 ```{r rename}
 g_c <- g_c %>%
@@ -225,12 +229,46 @@ c_min_y <- g_c_5 %>%
   filter(!is.na(gdpPercap)) %>%
   group_by(country) %>%
   summarise(min_year = min(year))
+```
 
-dim(c_min_y)
+## Spørsmål 17
+
+```{r}
+g_c_1960 %>%
+filter(year <= "1960-01-01") %>%
+  ggplot(mapping = aes(x = gdpPercap, y = lifeExp, size = pop, colour = continent)) +
+  geom_point() +
+  coord_cartesian(ylim = c(20, 90), xlim = c(0,10000)) +
+  theme(legend.position = "bottom")
 ```
 
 ```{r}
+<<<<<<< HEAD
 
+=======
+g_c_1960 %>% 
+  filter(year <= "1980-01-01") %>%
+  ggplot(mapping = aes(x = gdpPercap, y = lifeExp, size = pop, colour = continent)) +
+  geom_point() +
+  coord_cartesian(ylim = c(20, 80), xlim = c(0,50000)) +
+  theme(legend.position = "bottom")
+```
+```{r}
+g_c_1960 %>%
+  filter(year <= "2000-01-01") %>%
+  ggplot(mapping = aes(x = gdpPercap, y = lifeExp, size = pop, colour = continent)) +
+  geom_point() +
+  coord_cartesian(ylim = c(20, 90), xlim = c(0,110000)) +
+  theme(legend.position = "bottom")
+```
+```{r}
+g_c_1960 %>%
+  filter(year <= "2019-01-01") %>%
+  ggplot(mapping = aes(x = gdpPercap, y = lifeExp, size = pop, colour = continent)) +
+  geom_point() +
+  coord_cartesian(ylim = c(20, 90), xlim = c(0,110000)) +
+  theme(legend.position = "bottom")
+>>>>>>> 3f004b1aec1c657a35cfb93003ca02fe2b39446a
 ```
 
 

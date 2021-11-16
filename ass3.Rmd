@@ -19,6 +19,8 @@ library(prettydoc)
 library(knitr)
 library(tidyverse)
 library(dplyr)
+library(gapminder)
+library(magrittr)
 options(scipen = 999)
 ```
 
@@ -53,8 +55,9 @@ Gapminder pakken inneholder 6 variabler. Disse er:
 Australia og New Zealand ligger i kontinentet Asia.
 
 ## Spørsmål 5
+Her laster vi inn et nytt datasett, og skal deretter flytte Australia og New Zealand fra Asia til Oseania. 
 
-```{r}
+```{r country}
 g_c <- read_csv("data/ddf--entities--geo--country.csv")
 print(g_c)
 ```
@@ -63,7 +66,7 @@ print(g_c)
 ```{r spec}
 spec(g_c)
 ```
-
+I denne har vi flyttet Australia og New Zealand til Oseania, og bare inkludert landene som har iso3166_1_alpha3 koden. 
 
 ```{r continents}
 g_c <- g_c%>%
@@ -80,19 +83,21 @@ g_c <- g_c%>%
 
 ## Spørsmål 6
 ### a
+I dette nye datasettet finner vi ut hvor mange land som er der nå. 
+
 ```{r numberofcountries}
 length(unique(g_c$country))
 ```
 
 ### b
-
+Her ser man hvor mange land det nå er i hver kontinent.  
 ```{r countriesincontinent}
 g_c %>% 
   group_by(continent) %>% 
   summarise(countries = length(unique(country)))
 ```
 ## Spørsmål 7
-
+Vi laster enda ett nytt datasett, og endrer **time** variabelen til **date**. Videre endrer vi **time** til **year**. 
 ```{r lifeecp}
 lifeExp <- read_csv("data/countries-etc-datapoints/ddf--datapoints--life_expectancy_years--by--geo--time.csv",
 col_types = cols(time = col_date(format = "%Y")))
@@ -108,10 +113,10 @@ length(unique(lifeExp$geo))
 ```{r ContriesinlifeExp}
 length(unique(lifeExp$geo))
 ```
-
+Det er 195 land som har informasjon om LifeExp. 
 
 ## Spørsmål 9
-
+Her reduserer vi variablene til **country, name, iso3166_1_alpha3, un_sdg_region, world_4region, continent, world_6region**.
 ```{r Reducevariables}
 g_c <- g_c %>%
   select(country, name, iso3166_1_alpha3, un_sdg_region, world_4region, continent, world_6region) %>%
@@ -120,22 +125,23 @@ names(g_c)
 ```
 
 ## Spørsmål 10
-
 ```{r minyear}
 g_c_min <- g_c %>% 
   group_by(country) %>% 
   summarise(min_year = min(year))
 table(g_c_min$min_year)
 ```
+Den første observasjonen av lifeExp til de forskjellige landene er 186. 
 
 ## Spørsmål 11
-
+Under kan man se at de 9 landene som bare har **life expentancy** data fra 1950. 
 ```{r 1950}
 g_c_min %>% 
   filter(min_year == "1950-01-01")
 ```
 
 ## Spørsmål 12
+Leser her inn et nytt datasett, og endrer til dato. 
 
 ```{r total_population}
 
@@ -143,6 +149,7 @@ pop <- read_csv("data/countries-etc-datapoints/ddf--datapoints--population_total
                  col_types = cols(time = col_date(format = "%Y")))
              
 ```
+
 
 ```{r join_population}
 g_c <- g_c %>%
@@ -153,10 +160,11 @@ rm(pop)
 
 
 ## Spørsmål 13 
+Leser inn nytt datasett. 
 
 ```{r GDP_data}
 gdp_pc <- read_csv("data/countries-etc-datapoints/ddf--datapoints--gdppercapita_us_inflation_adjusted--by--geo--time.csv",
-                   col_types = cols(time = col_date(format = "%Y")))
+col_types = cols(time = col_date(format = "%Y")))
 ```
 
 
@@ -165,7 +173,7 @@ g_c <- g_c %>%
   left_join(gdp_pc, by = c("country" = "geo", "year" = "time"))
 ```
 
-
+Endrer her variabel navnene. 
 ```{r rename}
 g_c <- g_c %>%
   rename("lifeExp" = "life_expectancy_years") %>%
@@ -177,9 +185,10 @@ names(g_c)
 
 
 ## Spørsmål 14
+Her bruker vi dataene fra hver femte år. 
 
 ```{r g_c_5year}
-t1 <- paste (c(seq(1800, 2015, by = 5), 2019), "01-01", sep = "-") %>%
+t1 <- paste(c(seq(1800, 2015, by = 5), 2019), "01-01", sep = "-") %>%
   parse_date(format = "%Y-%m-%d")
 
 g_c_5year <- g_c %>% 
@@ -196,10 +205,9 @@ g_c_min_yr_gdp <- g_c_5year %>%
 
 g_c_min_yr_gdp %>%
   count(min_year = g_c_min_yr_gdp$min_year)
-
 ```
 
-Denne er feil
+
 
 ## Spørsmål 15 
 
@@ -225,8 +233,7 @@ Etter dette kan vi se at det er 84 land som har rapportert BNP de siste 60 åren
 
 Først i denne oppgaven lager vi ett nytt datasett for å finne observasjonene uten NA verdiene, for å finne antall land med verdier. Her får vi 191 land.  
 
-
-```{r gap_minder_1960}
+```{r nytt datasett g_c_1960}
 c_min_y <- g_c_5year %>%
   filter(!is.na(gdpPercap)) %>%
   group_by(country) %>% 
@@ -268,6 +275,7 @@ my_gapminder_1960 %>%
 
 
 ## Spørsmål 17
+Her bruker vi **ggplot()** for årene 1960, 1980, 2000 og 2019. 
 
 ```{r}
 my_gapminder_1960 %>%
@@ -287,6 +295,7 @@ my_gapminder_1960 %>%
   theme(legend.position = "bottom")
 ```
 
+
 ```{r}
 my_gapminder_1960 %>%
   filter(year <= "2000-01-01") %>%
@@ -296,15 +305,59 @@ my_gapminder_1960 %>%
   theme(legend.position = "bottom")
 ```
 
+<<<<<<< HEAD
 ```{r}
 my_gapminder_1960 %>%
-  filter(year <= "2019-01-01") %>%
-  ggplot(mapping = aes(x = gdpPercap, y = lifeExp, size = pop, colour = continent)) +
+=======
+
+
+## Spørsmål 18
+
+```{r 1960 log}
+g_c_1960 %>% 
+  filter(year <= "1960-01-01") %>% 
+  ggplot(mapping = aes(x = log(gdpPercap), y = lifeExp, size = pop, colour = continent)) +
   geom_point() +
-  coord_cartesian(ylim = c(20, 90), xlim = c(0,110000)) +
+  coord_cartesian(ylim = c(20, 90), xlim = c(5, 12)) +
   theme(legend.position = "bottom")
 ```
 
+```{r 1980 log}
+g_c_1960 %>%
+  filter(year <= "1980-01-01") %>%
+  ggplot(mapping = aes(x = log(gdpPercap), y = lifeExp, size = pop, colour = continent)) +
+  geom_point() +
+  coord_cartesian(ylim = c(20, 90), xlim = c(5, 12)) +
+  theme(legend.position = "bottom")
+```
 
+```{r 2000 log}
+g_c_1960 %>%
+  filter(year <= "2000-01-01") %>%
+  ggplot(mapping = aes(x = log(gdpPercap), y = lifeExp, size = pop, colour = continent)) +
+  geom_point() +
+  coord_cartesian(ylim = c(20, 90), xlim = c(5, 12)) +
+  theme(legend.position = "bottom")
+```
 
+```{r 2019 log}
+g_c_1960 %>%
+>>>>>>> 0af30dce5022acc933596ca2225fdc41eca7e33d
+  filter(year <= "2019-01-01") %>%
+  ggplot(mapping = aes(x = log(gdpPercap), y = lifeExp, size = pop, colour = continent)) +
+  geom_point() +
+  coord_cartesian(ylim = c(20, 90), xlim = c(5, 12)) +
+  theme(legend.position = "bottom")
+```
+
+## Spørsmål 19
+
+I de siste 59 årene har det vært noen store observasjoner som en kan se. En av dem er at det har vært en stor utvikling i landene og kontinentene som har begynt å rapportere BNP per innbygger. 
+
+## Spørsmål 20
+
+```{r writetable}
+write.table(g_c, file = "my_gapminder.csv", sep = ",")
+write.table(g_c_5, file = "my_gapminder_red.csv", sep = ",")
+```
 

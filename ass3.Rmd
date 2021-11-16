@@ -235,7 +235,7 @@ Først i denne oppgaven lager vi ett nytt datasett for å finne observasjonene u
 
 ```{r nytt datasett g_c_1960}
 c_min_y <- g_c_5year %>%
-  filter(!is.na(gdpPercap)) %>%
+  filter (!is.na(gdpPercap)) %>%
   group_by(country) %>% 
   summarise(min_year = min(year))
 
@@ -305,16 +305,11 @@ my_gapminder_1960 %>%
   theme(legend.position = "bottom")
 ```
 
-<<<<<<< HEAD
-```{r}
-my_gapminder_1960 %>%
-=======
-
 
 ## Spørsmål 18
 
 ```{r 1960 log}
-g_c_1960 %>% 
+my_gapminder_1960 %>% 
   filter(year <= "1960-01-01") %>% 
   ggplot(mapping = aes(x = log(gdpPercap), y = lifeExp, size = pop, colour = continent)) +
   geom_point() +
@@ -323,7 +318,7 @@ g_c_1960 %>%
 ```
 
 ```{r 1980 log}
-g_c_1960 %>%
+my_gapminder_1960 %>%
   filter(year <= "1980-01-01") %>%
   ggplot(mapping = aes(x = log(gdpPercap), y = lifeExp, size = pop, colour = continent)) +
   geom_point() +
@@ -332,7 +327,7 @@ g_c_1960 %>%
 ```
 
 ```{r 2000 log}
-g_c_1960 %>%
+my_gapminder_1960 %>%
   filter(year <= "2000-01-01") %>%
   ggplot(mapping = aes(x = log(gdpPercap), y = lifeExp, size = pop, colour = continent)) +
   geom_point() +
@@ -341,8 +336,7 @@ g_c_1960 %>%
 ```
 
 ```{r 2019 log}
-g_c_1960 %>%
->>>>>>> 0af30dce5022acc933596ca2225fdc41eca7e33d
+my_gapminder_1960 %>%
   filter(year <= "2019-01-01") %>%
   ggplot(mapping = aes(x = log(gdpPercap), y = lifeExp, size = pop, colour = continent)) +
   geom_point() +

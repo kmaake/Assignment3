@@ -188,7 +188,7 @@ names(g_c)
 Her bruker vi dataene fra hver femte år. 
 
 ```{r g_c_5year}
-t1 <- paste (c(seq(1800, 2015, by = 5), 2019), "01-01", sep = "-") %>%
+t1 <- paste(c(seq(1800, 2015, by = 5), 2019), "01-01", sep = "-") %>%
   parse_date(format = "%Y-%m-%d")
 
 g_c_5year <- g_c %>% 
@@ -234,7 +234,7 @@ Etter dette kan vi se at det er 84 land som har rapportert BNP de siste 60 åren
 Først i denne oppgaven lager vi ett nytt datasett for å finne observasjonene uten NA verdiene, for å finne antall land med verdier. Her får vi 191 land.  
 
 ```{r nytt datasett g_c_1960}
-c_min_y <- g_c_5 %>%
+c_min_y <- g_c_5year %>%
   filter(!is.na(gdpPercap)) %>%
   group_by(country) %>% 
   summarise(min_year = min(year))

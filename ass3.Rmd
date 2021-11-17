@@ -11,6 +11,7 @@ output:
   word_document: default
 lang: no-NB
 ---
+\newpage
 
 ```{r setup, message=FALSE, echo=FALSE}
 library(readr)
@@ -187,7 +188,7 @@ names(g_c)
 ## Spørsmål 14
 Her bruker vi dataene fra hver femte år. 
 
-```{r g_c_5year}
+```{ryear}
 t1 <- paste(c(seq(1800, 2015, by = 5), 2019), "01-01", sep = "-") %>%
   parse_date(format = "%Y-%m-%d")
 
@@ -198,7 +199,7 @@ g_c_5year <- g_c %>%
 dim(g_c_5year)
 ```
 
-```{r g_c_5year}
+```{ryear}
 g_c_min_yr_gdp <- g_c_5year %>%
   group_by(gdpPercap) %>%
   summarise (min_year = min(year))
@@ -213,7 +214,7 @@ g_c_min_yr_gdp %>%
 
 Chunken under brukes for å vise hvilket år hvert land har innhentet BNP. 
 
-```{r}
+```{r tmp}
 tmp <- g_c %>%
   filter (!is.na(gdpPercap)) %>%
   group_by(country) %>%
@@ -222,7 +223,7 @@ tmp <- g_c %>%
 ```
 
 Videre filtreres det ned til landene som har rapportert BNP over en lengre periode. I dette tilfelle de siste 60 årene:
-```{r}
+```{r filter}
 g_c_5year <- tmp %>%
   filter(nr > 60)
 ```

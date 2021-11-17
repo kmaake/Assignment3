@@ -232,7 +232,7 @@ Etter dette kan vi se at det er 84 land som har rapportert BNP de siste 60 åren
 
 ## Spørsmål 16 
 
-Først i denne oppgaven lager vi ett nytt datasett for å finne observasjonene uten NA verdiene, for å finne antall land med verdier. Her får vi 191 land.  
+Først i denne oppgaven lager vi ett nytt datasett for å finne observasjonene for å finne antall land med verdier i tidsperioden 1960-2019. Her finner vi 191 land.  
 
 ```{r nytt datasett g_c_1960}
 c_min_y <- g_c %>%
@@ -243,7 +243,7 @@ c_min_y <- g_c %>%
 dim(c_min_y)
 ```
 
-
+Her ser vi at i my_gapminder_1960 datasettet er det 25886 observasjoner og 11 variabler. 
 ```{r gap_minder_1960}
 c_min_y_60 <- c_min_y$country[c_min_y$min_year == "1960-01-01"]
 my_gapminder_1960 <- g_c %>%
@@ -252,20 +252,20 @@ my_gapminder_1960 <- g_c %>%
 dim(my_gapminder_1960)
 ```
 
-Videre ser man at det er 84 land med registrert data:
+Videre ser man at det er 86 land med registrert data:
 
 ```{r}
 length(unique(my_gapminder_1960$country))
 ```
 
-Videre finner vi antall NA verdier:
+Videre finner vi oversikt over NA verdier:
 
 
 ```{r NA_variables}
 (num_NA <- my_gapminder_1960[is.na(my_gapminder_1960$gdpPercap) == TRUE, ])
 ```
 
-
+Til slutt finner hvor mange land det er fra hvert kontinent i datasettet:
 
 ```{r country_per_continent}
 my_gapminder_1960 %>%
@@ -298,7 +298,7 @@ my_gapminder_1960 %>%
 ```
 
 
-```{r}
+```{r mygapminder}
 my_gapminder_1960 %>%
   filter(year <= "2000-01-01") %>%
   ggplot(mapping = aes(x = gdpPercap, y = lifeExp, size = pop, colour = continent)) +
@@ -309,8 +309,9 @@ my_gapminder_1960 %>%
 
 
 ## Spørsmål 18
+Her bruker vi log i ggplottene. 
 
-```{r 1960 log}
+```{r 1960}
 my_gapminder_1960 %>% 
   filter(year <= "1960-01-01") %>% 
   ggplot(mapping = aes(x = log(gdpPercap), y = lifeExp, size = pop, colour = continent)) +
@@ -319,7 +320,7 @@ my_gapminder_1960 %>%
   theme(legend.position = "bottom")
 ```
 
-```{r 1980 log}
+```{r 1980}
 my_gapminder_1960 %>%
   filter(year <= "1980-01-01") %>%
   ggplot(mapping = aes(x = log(gdpPercap), y = lifeExp, size = pop, colour = continent)) +
@@ -328,7 +329,7 @@ my_gapminder_1960 %>%
   theme(legend.position = "bottom")
 ```
 
-```{r 2000 log}
+```{r 2000}
 my_gapminder_1960 %>%
   filter(year <= "2000-01-01") %>%
   ggplot(mapping = aes(x = log(gdpPercap), y = lifeExp, size = pop, colour = continent)) +
@@ -337,7 +338,7 @@ my_gapminder_1960 %>%
   theme(legend.position = "bottom")
 ```
 
-```{r 2019 log}
+```{r 2019}
 my_gapminder_1960 %>%
   filter(year <= "2019-01-01") %>%
   ggplot(mapping = aes(x = log(gdpPercap), y = lifeExp, size = pop, colour = continent)) +
@@ -348,7 +349,7 @@ my_gapminder_1960 %>%
 
 ## Spørsmål 19
 
-I de siste 59 årene har det vært noen store observasjoner som en kan se. En av dem er at det har vært en stor utvikling i landene og kontinentene som har begynt å rapportere BNP per innbygger. 
+I de siste 59 årene har det vært noen store observasjoner som man kan se. Man kan se at det er en økning i antall land som rapporterer BNP per innbygger. Man ser god ut en stor utvikling i landene og kontinentene som rapporterer BNP per innbygger. 
 
 ## Spørsmål 20
 

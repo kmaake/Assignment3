@@ -214,7 +214,7 @@ g_c_min_yr_gdp %>%
 Chunken under brukes for å vise hvilket år hvert land har innhentet BNP. 
 
 ```{r}
-g_c <- g_c %>%
+tmp <- g_c %>%
   filter (!is.na(gdpPercap)) %>%
   group_by(country) %>%
   summarise (nr=n()) %>%
@@ -223,7 +223,7 @@ g_c <- g_c %>%
 
 Videre filtreres det ned til landene som har rapportert BNP over en lengre periode. I dette tilfelle de siste 60 årene:
 ```{r}
-g_c_5year <- g_c %>%
+g_c_5year <- tmp %>%
   filter(nr > 60)
 ```
 
@@ -234,7 +234,7 @@ Etter dette kan vi se at det er 84 land som har rapportert BNP de siste 60 åren
 Først i denne oppgaven lager vi ett nytt datasett for å finne observasjonene uten NA verdiene, for å finne antall land med verdier. Her får vi 191 land.  
 
 ```{r nytt datasett g_c_1960}
-c_min_y <- g_c_5year %>%
+c_min_y <- g_c %>%
   filter (!is.na(gdpPercap)) %>%
   group_by(country) %>% 
   summarise(min_year = min(year))
@@ -245,19 +245,20 @@ dim(c_min_y)
 
 ```{r gap_minder_1960}
 c_min_y_60 <- c_min_y$country[c_min_y$min_year == "1960-01-01"]
-my_gapminder_1960 <- g_c_5year %>%
+my_gapminder_1960 <- g_c %>%
   filter(country %in% c_min_y_60)
 
 dim(my_gapminder_1960)
 ```
 
-Videre ser man at det er 86 land med registrert data:
+Videre ser man at det er 84 land med registrert data:
 
 ```{r}
 length(unique(my_gapminder_1960$country))
 ```
 
 Videre finner vi antall NA verdier:
+
 
 ```{r NA_variables}
 (num_NA <- my_gapminder_1960[is.na(my_gapminder_1960$gdpPercap) == TRUE, ])

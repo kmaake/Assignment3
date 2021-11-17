@@ -353,6 +353,6 @@ I de siste 59 årene har det vært noen store observasjoner som en kan se. En av
 
 ```{r writetable}
 write.table(g_c, file = "my_gapminder.csv", sep = ",")
-write.table(g_c_5, file = "my_gapminder_red.csv", sep = ",")
+write.table(g_c_5year, file = "my_gapminder_red.csv", sep = ",")
 ```
 

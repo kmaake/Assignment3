@@ -281,26 +281,52 @@ Her bruker vi **ggplot()** for årene 1960, 1980, 2000 og 2019.
 
 ```{r}
 my_gapminder_1960 %>%
-filter(year <= "1960-01-01") %>%
+  # ok med <= siden vi starter 1960, men kansje bedre med == så er det lettere å 
+  # forstå hva vi gjør
+filter(year == "1960-01-01") %>%
   ggplot(mapping = aes(x = gdpPercap, y = lifeExp, size = pop, colour = continent)) +
   geom_point() +
-  coord_cartesian(ylim = c(20, 90), xlim = c(0,10000)) +
+  # satt samme xlim som nedenfor. lettere å samenligne
+  coord_cartesian(ylim = c(20, 90), xlim = c(0,110000)) +
   theme(legend.position = "bottom")
 ```
 
 ```{r}
 my_gapminder_1960 %>% 
-  filter(year <= "1980-01-01") %>%
+  # data for år 1980
+  filter(year == "1980-01-01") %>%
   ggplot(mapping = aes(x = gdpPercap, y = lifeExp, size = pop, colour = continent)) +
+  # alternativ måte å sette xlim og ylim. Bruker samme på alle så lettere å se utviklingen
+  xlim(0, 110000) +
+  ylim(20,90) +
   geom_point() +
-  coord_cartesian(ylim = c(20, 80), xlim = c(0,50000)) +
+  #coord_cartesian(ylim = c(20, 80), xlim = c(0,50000)) +
   theme(legend.position = "bottom")
 ```
 
 
 ```{r mygapminder}
+# Denne er litt kul, men blir kanskje litt "crowded"
 my_gapminder_1960 %>%
   filter(year <= "2000-01-01") %>%
+  ggplot(mapping = aes(x = gdpPercap, y = lifeExp, size = pop, colour = continent)) +
+  geom_point() +
+  coord_cartesian(ylim = c(20, 90), xlim = c(0,110000)) +
+  theme(legend.position = "bottom")
+```
+
+```{r mygapminder_2000_ag}
+my_gapminder_1960 %>%
+  filter(year == "2000-01-01") %>%
+  ggplot(mapping = aes(x = gdpPercap, y = lifeExp, size = pop, colour = continent)) +
+  geom_point() +
+  coord_cartesian(ylim = c(20, 90), xlim = c(0,110000)) +
+  theme(legend.position = "bottom")
+```
+
+```{r mygapminder_2019_ag}
+my_gapminder_1960 %>%
+  filter(year == "2019-01-01") %>%
   ggplot(mapping = aes(x = gdpPercap, y = lifeExp, size = pop, colour = continent)) +
   geom_point() +
   coord_cartesian(ylim = c(20, 90), xlim = c(0,110000)) +
@@ -313,7 +339,7 @@ Her bruker vi log i ggplottene.
 
 ```{r 1960}
 my_gapminder_1960 %>% 
-  filter(year <= "1960-01-01") %>% 
+  filter(year == "1960-01-01") %>% 
   ggplot(mapping = aes(x = log(gdpPercap), y = lifeExp, size = pop, colour = continent)) +
   geom_point() +
   coord_cartesian(ylim = c(20, 90), xlim = c(5, 12)) +
@@ -322,7 +348,7 @@ my_gapminder_1960 %>%
 
 ```{r 1980}
 my_gapminder_1960 %>%
-  filter(year <= "1980-01-01") %>%
+  filter(year == "1980-01-01") %>%
   ggplot(mapping = aes(x = log(gdpPercap), y = lifeExp, size = pop, colour = continent)) +
   geom_point() +
   coord_cartesian(ylim = c(20, 90), xlim = c(5, 12)) +
@@ -331,7 +357,7 @@ my_gapminder_1960 %>%
 
 ```{r 2000}
 my_gapminder_1960 %>%
-  filter(year <= "2000-01-01") %>%
+  filter(year == "2000-01-01") %>%
   ggplot(mapping = aes(x = log(gdpPercap), y = lifeExp, size = pop, colour = continent)) +
   geom_point() +
   coord_cartesian(ylim = c(20, 90), xlim = c(5, 12)) +
@@ -340,7 +366,7 @@ my_gapminder_1960 %>%
 
 ```{r 2019}
 my_gapminder_1960 %>%
-  filter(year <= "2019-01-01") %>%
+  filter(year == "2019-01-01") %>%
   ggplot(mapping = aes(x = log(gdpPercap), y = lifeExp, size = pop, colour = continent)) +
   geom_point() +
   coord_cartesian(ylim = c(20, 90), xlim = c(5, 12)) +
@@ -356,5 +382,9 @@ I de siste 59 årene har det vært noen store observasjoner som man kan se. Man 
 ```{r writetable}
 write.table(g_c, file = "my_gapminder.csv", sep = ",")
 write.table(g_c_5year, file = "my_gapminder_red.csv", sep = ",")
+```
+
+```{r, echo = FALSE}
+#siste
 ```
 

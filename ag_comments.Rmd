@@ -1,0 +1,24 @@
+---
+<<<<<<< HEAD
+title: ag_comments"
+output: html_notebook
+---
+
+<<<<<<< HEAD
+-   Reproduserbart til html og pdf uten problemer. Flott!
+=======
+-   Reproduserbart til html og pdf uten problemet. Flott!
+>>>>>>> acad971c80e4f9dbe9d7809441546c61e59f6556
+-   
+=======
+title: "ag comments"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+-   Har stort sett bare endret fra \<= til == for de ulike årene
+-   Har også satt samme xlim og ylim på aksene. Gjør at det blir lettere å sammenligne årene.
+-   Se også bruk av `xlim()` `ylim()` for 1980 ikke log. Kanskje lettere å huske enn `coord_cartesian(ylim = c(20, 90), xlim = c(0,110000))`
+>>>>>>> main
